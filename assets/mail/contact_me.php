@@ -32,6 +32,7 @@ try {
   $mail->Password = $credentials["password"];
   $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
   $mail->Port = 465;
+  $mail->CharSet = "UTF-8";
   $mail->setFrom("noreply@gabormajerszky.com", "gabormajerszky.com");
   $mail->addAddress("majerszkygabor@gmail.com");
   $mail->addReplyTo("$email", "$name");
