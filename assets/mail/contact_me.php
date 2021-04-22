@@ -1,22 +1,46 @@
 <?php
-// Check for empty fields
-if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['phone']) || empty($_POST['message']) || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
+
+require "./PHPMailer/Exception.php";
+require "./PHPMailer/PHPMailer.php";
+require "./PHPMailer/SMTP.php";
+
+if (empty($_POST["name"]) || empty($_POST["email"]) || empty($_POST["phone"]) || empty($_POST["message"]) || !filter_var($_POST["email"], FILTER_VALIDATE_EMAIL)) {
   http_response_code(500);
   exit();
 }
 
-$name = strip_tags(htmlspecialchars($_POST['name']));
-$email = strip_tags(htmlspecialchars($_POST['email']));
-$phone = strip_tags(htmlspecialchars($_POST['phone']));
-$message = strip_tags(htmlspecialchars($_POST['message']));
+$config = parse_ini_file("../../config.ini");
+$credentials = parse_ini_file($config["path"]);
 
-// Create the email and send the message
-$to = "majerszkygabor@gmail.com"; // This is where the form will send a message to.
-$subject = "Website Contact Form:  $name";
-$body = "You have received a new message from your website contact form.\n\n"."Here are the details:\n\nName: $name\n\nEmail: $email\n\nPhone: $phone\n\nMessage:\n$message";
-$header = "From: noreply@gabormajerszky.com\n"; // This is the email address the generated message will be from. We recommend using something like noreply@yourdomain.com.
-$header .= "Reply-To: $email";	
+$name = strip_tags(htmlspecialchars($_POST["name"]));
+$email = strip_tags(htmlspecialchars($_POST["email"]));
+$phone = strip_tags(htmlspecialchars($_POST["phone"]));
+$message = strip_tags(htmlspecialchars($_POST["message"]));
 
-if(!mail($to, $subject, $body, $header))
+// Passing true enables exceptions
+$mail = new PHPMailer(true);
+
+try {  
+  $mail->isSMTP();
+  $mail->Host = "smtp.gmail.com";
+  $mail->SMTPAuth = true;
+  $mail->Username = $credentials["username"];
+  $mail->Password = $credentials["password"];
+  $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+  $mail->Port = 465;
+  $mail->setFrom("noreply@gabormajerszky.com", "gabormajerszky.com");
+  $mail->addAddress("majerszkygabor@gmail.com");
+  $mail->addReplyTo("$email", "$name");
+  $mail->isHTML(true);
+  $mail->Subject = "Contact Form Message from $name";
+  $mail->Body = "You recieved a message through the contact form of your website, gabormajerszky.com. <br> Here are the details: <br><br> Name: $name <br> Email: $email <br> Phone: $phone <br><br> $message";
+  $mail->send();
+} catch (Exception $e) {
   http_response_code(500);
+}
+  
 ?>
