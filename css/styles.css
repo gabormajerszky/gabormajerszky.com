@@ -10174,6 +10174,7 @@ h3 {
   display: block;
   max-width: 25rem;
   border-radius: 0.5rem;
+  border: 1px solid #2c3e5080;
   overflow: hidden;
 }
 .portfolio .portfolio-item .portfolio-item-caption {
