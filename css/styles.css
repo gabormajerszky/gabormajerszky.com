@@ -10201,6 +10201,9 @@ h3 {
     line-height: 2.5rem;
   }
 }
+.portfolio-modal .portfolio-modal-image {
+  border: 1px solid;
+}
 .portfolio-modal .close {
   position: absolute;
   z-index: 1;
