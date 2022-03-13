@@ -26,12 +26,12 @@ $mail = new PHPMailer(true);
 
 try {  
   $mail->isSMTP();
-  $mail->Host = "smtp.gmail.com";
+  $mail->Host = "smtp-mail.outlook.com";
   $mail->SMTPAuth = true;
   $mail->Username = $credentials["username"];
   $mail->Password = $credentials["password"];
   $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-  $mail->Port = 465;
+  $mail->Port = 587;
   $mail->CharSet = "UTF-8";
   $mail->setFrom("noreply@gabormajerszky.com", "gabormajerszky.com");
   $mail->addAddress("majerszkygabor@gmail.com");
