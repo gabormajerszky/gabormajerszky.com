@@ -24,16 +24,18 @@ $message = strip_tags(htmlspecialchars($_POST["message"]));
 // Passing true enables exceptions
 $mail = new PHPMailer(true);
 
-try {  
+try {
   $mail->isSMTP();
   $mail->Host = "smtp-mail.outlook.com";
+  $mail->Mailer = "smtp";
+  $mail->SMTPSecure = "tls";
   $mail->SMTPAuth = true;
   $mail->Username = $credentials["username"];
   $mail->Password = $credentials["password"];
-  $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+  $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
   $mail->Port = 587;
   $mail->CharSet = "UTF-8";
-  $mail->setFrom("noreply@gabormajerszky.com", "gabormajerszky.com");
+  $mail->setFrom($credentials["username"], "gabormajerszky.com");
   $mail->addAddress("majerszkygabor@gmail.com");
   $mail->addReplyTo("$email", "$name");
   $mail->isHTML(true);
